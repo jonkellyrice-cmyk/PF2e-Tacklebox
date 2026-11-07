@@ -31,5 +31,8 @@
       "name": "English",
       "path": "features/action-icons/en.json"
     }
-  ]
+  ],
+  "url": "https://github.com/jonkellyrice-cmyk/PF2e-Tacklebox",
+  "manifest": "https://github.com/jonkellyrice-cmyk/PF2e-Tacklebox/releases/latest/download/module.json",
+  "download": "https://raw.githubusercontent.com/jonkellyrice-cmyk/PF2e-Tacklebox/install-v0.1.1/module.zip"
 }
