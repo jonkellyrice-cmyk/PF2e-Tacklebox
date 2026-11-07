@@ -1,0 +1,37 @@
+{
+  "id": "forge-foundry-module-template",
+  "title": "Forge Foundry Module Template",
+  "description": "A reusable Pathfinder Second Edition module starter.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "jonkellyrice-cmyk"
+    }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "maximum": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "8.0.0",
+          "maximum": "8"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

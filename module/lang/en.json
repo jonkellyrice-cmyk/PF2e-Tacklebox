@@ -1,0 +1,8 @@
+{
+  "forge-foundry-module-template": {
+    "debug": {
+      "name": "Log module startup",
+      "hint": "Print one diagnostic message in your browser console when the world loads."
+    }
+  }
+}

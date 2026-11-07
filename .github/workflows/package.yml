@@ -1,0 +1,50 @@
+name: Check and package module
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check starter JavaScript
+        run: find module/scripts -name '*.mjs' -print0 | xargs -0 -r -n1 node --check
+      - name: Build installable package
+        shell: bash
+        run: |
+          args=(--repo "$GITHUB_REPOSITORY")
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            args+=(--tag "$GITHUB_REF_NAME")
+          fi
+          python3 tools/package.py "${args[@]}"
+          unzip -p dist/module.zip module.json | cmp - dist/module.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foundry-module
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    needs: package
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: foundry-module
+          path: dist
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/module.json dist/module.zip --repo "$GITHUB_REPOSITORY" --verify-tag --title "$GITHUB_REF_NAME" --generate-notes
