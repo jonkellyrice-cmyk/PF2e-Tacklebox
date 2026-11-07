@@ -2,15 +2,14 @@
   "id": "pf2e-tacklebox",
   "title": "PF2e Tacklebox",
   "description": "Independent quality-of-life tools for Pathfinder Second Edition. Customize action icons on character sheets.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     {
       "name": "jonkellyrice-cmyk"
     }
   ],
   "compatibility": {
-    "minimum": "14",
-    "maximum": "14"
+    "minimum": "14"
   },
   "relationships": {
     "systems": [
@@ -18,8 +17,7 @@
         "id": "pf2e",
         "type": "system",
         "compatibility": {
-          "minimum": "8.0.0",
-          "maximum": "8"
+          "minimum": "8.0.0"
         }
       }
     ]
