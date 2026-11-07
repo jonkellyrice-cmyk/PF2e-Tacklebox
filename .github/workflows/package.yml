@@ -16,8 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check starter JavaScript
-        run: find module/scripts -name '*.mjs' -print0 | xargs -0 -r -n1 node --check
+      - name: Check module JavaScript
+        run: find module -name '*.mjs' -print0 | xargs -0 -r -n1 node --check
+      - run: node --test
       - name: Build installable package
         shell: bash
         run: |

@@ -1,48 +1,27 @@
-# Forge Foundry Module Template
+# PF2e Tacklebox
 
-A small, build-free JavaScript starter for Pathfinder Second Edition worlds on Foundry VTT, including games hosted on The Forge. The starter registers one optional diagnostic setting. It does not modify actors, items, sheets, or world data during startup.
+Small, independent conveniences for Pathfinder Second Edition character sheets. Targets Foundry 14 and PF2e 8, including worlds hosted on The Forge.
 
-## Start a module
+## Custom action icons
 
-1. Use GitHub's **Use this template** if available, or copy the repository to a new project. A repository admin can enable **Template repository** in GitHub Settings → General.
-2. Edit `module/module.json`. Choose a unique lowercase, hyphenated ID, title, description, author, and initial version. Replace `forge-foundry-module-template` in `module/scripts/main.mjs` and `module/lang/en.json` with the same ID. Keep the ID stable after release. Use a public repository for the documented one-click install flow.
-3. The baseline targets Foundry 14 and PF2e 8. Confirm the exact versions you support in a test world before publishing. The system relationship makes PF2e the intended world system; the module does not create or switch worlds.
-4. Develop in `module/`. Put JavaScript in `scripts/` and translations in `lang/`. Register additional entry points, languages, styles or compendium packs in the manifest when you add them. Everything in `module/` ships, so keep development files and private material outside that directory. For a content module, follow the PF2e pack guide below.
-5. Choose a license and include it in the module directory before distributing your own work. Review permissions for third-party content separately.
+1. Open your character's **Actions** tab. Right-click the name, icon, or row of an action such as High Jump or Lightning Swap.
+2. Select **Browse / upload image** and choose from the sources visible to your account. To add your own file, navigate to a writable folder (such as your Forge Assets Library), use the picker's upload control and select the uploaded image. File browsing, uploading and shared-folder access follow the host's permissions.
+3. The recommended artwork is **1:1 at 128 × 128 px**. Up to a 1.2:1 long-to-short-side ratio, Tacklebox stretches the image to square. More rectangular artwork receives transparent padding. Large images are resampled to 128 × 128. The original file stays in the library at its original resolution.
+4. To undo, right-click the same row and select **Restore PF2e icon**. Owners and GMs can edit. Everyone viewing the sheet sees the saved thumbnail.
 
-## Run locally
+The feature covers item-backed action, reaction, free action, exploration and downtime rows, including feat-granted actions. Strikes, the inventory, chat, and hotbar macros keep their own artwork. The sheet uses a small thumbnail saved in a module flag on the owned item. Editing an icon does not change its action cost or the source compendium. An inaccessible image or a cross-origin server that disallows image processing leaves the previous icon in place.
 
-Copy or symlink the **contents of the module directory as a folder named for the manifest ID** under Foundry's user data. For this starter the resulting path is `Data/modules/forge-foundry-module-template/module.json`. Restart Foundry, open a PF2e test world, enable the module in **Manage Modules**, and reload. Direct edits to a symlinked checkout appear after reload.
+The GM can switch **Custom action icons** off under Configure Settings → PF2e Tacklebox and reload. Turning it back on restores existing customizations.
 
-**Smoke test.** Open Configure Settings and find the module's diagnostic setting. Enable it, reload, and look for the module ID and PF2e version in the browser console. Disable it and reload to confirm quiet startup. Repeat as a player for any player-facing features you add. Local packaging checks do not run the Foundry client.
+## Install and develop
 
-## Check and package
+- **Released version:** In The Forge Bazaar's manifest installer or Foundry Setup → Add-on Modules → Install Module, paste the [release manifest](https://github.com/jonkellyrice-cmyk/PF2e-Tacklebox/releases/latest/download/module.json). This URL becomes available with the first tagged release. Enable PF2e Tacklebox under Manage Modules in the world.
+- **Local build:** Copy `module/` to `Data/modules/pf2e-tacklebox/` so that `module.json` is directly inside that folder. Restart Foundry and enable the module.
+- **Test and package:** Run `node --test` and `python3 tools/package.py --repo jonkellyrice-cmyk/PF2e-Tacklebox`. Outputs are `dist/module.zip` and `dist/module.json`.
+- **Publish:** Push a tag matching the committed version, such as `v0.1.0`. GitHub Actions builds and attaches the ZIP and manifest to a release.
 
-Use Python 3.10+ and Node.js 22+ from the repository root. No npm or pip install is required.
+## Feature boundaries
 
-```sh
-node --check module/scripts/main.mjs
-python3 tools/package.py --repo OWNER/REPOSITORY
-```
+Each feature lives in its own folder under `module/features/`, owns its settings, translations and hooks, and exposes a registration function. The entry point wires them together. Add localization files to the manifest as needed. Features do not import one another.
 
-Replace `OWNER/REPOSITORY` with your GitHub path. The command validates the manifest, PF2e relationship and declared files, then creates `dist/module.json` and `dist/module.zip`. The ZIP has the manifest at its root. Its manifest matches the standalone copy. The packager fills in the repository URL, stable update manifest and version-specific download URL for the project being built. The source manifest is suitable for local development.
-
-## Publish and install
-
-Commit the module version you want to ship, then tag that commit with `v` plus its exact version (for example `v0.1.0`) and push the tag. The GitHub Actions workflow checks and packages every branch push and pull request. A matching version tag also creates a release with both assets. Enable GitHub Actions in derived repositories. Publishing uses the built-in GitHub token and requires the workflow's contents-write permission. Use a fresh version and tag for each release.
-
-After the release is public, copy this URL **using your own owner and repository**:
-
-```text
-https://github.com/OWNER/REPOSITORY/releases/latest/download/module.json
-```
-
-- **The Forge:** Open the Bazaar's manifest installation option, paste the URL and install. Open your PF2e world and enable the package under Manage Modules.
-- **Self-hosted Foundry:** In Setup → Add-on Modules → Install Module, paste the same manifest URL. Enable the module in the world.
-- **Updates:** Publish a higher manifest version and use the host's package update control. If a fresh install fails, open the public manifest and its download URL signed out and check core/system versions. The latest URL starts working after the first release. Bazaar catalog listing is separate from manual manifest installation.
-
-## References
-
-- [Foundry module manifests and layout](https://foundryvtt.com/article/module-development/)
-- [PF2e content modules and compendiums](https://github.com/foundryvtt/pf2e/wiki/Creating-a-PF2e-Content-Module)
-- [The Forge Bazaar](https://forge-vtt.com/bazaar)
+The sheet integration follows the [PF2e action row template](https://github.com/foundryvtt/pf2e/blob/pf2e-8.6.1/static/templates/actors/partials/action.hbs) and uses the host-configured [Foundry FilePicker](https://foundryvtt.com/api/v14/classes/foundry.applications.apps.FilePicker.html).
