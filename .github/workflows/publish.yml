@@ -1,0 +1,20 @@
+name: Publish Tacklebox 0.1.0
+on:
+  push:
+    branches: [install-v0.1.0]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish verified package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir assets
+          unzip -p module.zip module.json > assets/module.json
+          test "$(jq -r .version assets/module.json)" = "0.1.0"
+          cp module.zip assets/
+          gh release create v0.1.0 assets/module.json assets/module.zip --target 1e14042da85802fe31bdab40c5724b77e3a3f1e7 --title 'PF2e Tacklebox 0.1.0' --notes 'Custom icons for PF2e character action rows.'
